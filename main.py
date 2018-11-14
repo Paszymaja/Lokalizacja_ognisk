@@ -3,24 +3,40 @@ import numpy as np
 
 
 wb = openpyxl.load_workbook('wb.xlsx')
-sheet = wb['Arkusz1']
-tab = []
+arkusz = wb['Arkusz1']
+wave_speed = arkusz['A14'].value
 
 
-wave_speed = sheet['I2'].value
-
-
-def wczytanie_danych(sheet, tab):
+def wczytanie_danych(sheet):
+    tab = []
     for row_i in range(2, 10):
-        for column_i in range(2, 5):
-            print(row_i, sheet.cell(row=row_i, column=column_i).value)
-            x1 = sheet.cell(row_i, column_i).value
+        for column_i in range(2, 6):
+            x1 = float(sheet.cell(row_i, column_i).value)
             tab.append(x1)
-    mat = np.array(tab).reshape(8, 3)
+    mat = np.array(tab).reshape(8, 4)
     return mat
 
 
-print(wczytanie_danych(sheet, tab))
+macierzA = wczytanie_danych(arkusz)
+print(macierzA)
+print("   ")
+
+
+def linearyzjaca(macierz, v):
+    for i in range(1, 8):
+        for j in range(0, 3):
+            if j != 3:
+                macierz[i][j] = 2*(-macierz[i][j]+macierz[0][j])
+            else:
+                macierz[i][j] = pow(v, 2)*2*(macierz[i][j]-macierz[0][j])
+    return macierz
+
+
+print(linearyzjaca(macierzA, wave_speed))
+
+
+
+
 
 
 
