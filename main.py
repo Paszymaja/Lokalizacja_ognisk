@@ -19,12 +19,11 @@ def wczytanie_danych(sheet):
 
 macierzA = wczytanie_danych(arkusz)
 print(macierzA)
-print("   ")
 
 
 def linearyzjaca(macierz, v):
-    for i in range(1, 8):
-        for j in range(0, 3):
+    for i in range(0, 8):
+        for j in range(0, 4):
             if j != 3:
                 macierz[i][j] = 2*(-macierz[i][j]+macierz[0][j])
             else:
@@ -32,7 +31,10 @@ def linearyzjaca(macierz, v):
     return macierz
 
 
-print(linearyzjaca(macierzA, wave_speed))
+macierzA = linearyzjaca(macierzA, wave_speed)
+macierzA = np.delete(macierzA, 0, 0)
+print(macierzA)
+
 
 
 
