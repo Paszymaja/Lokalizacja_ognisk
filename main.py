@@ -2,7 +2,7 @@ import openpyxl
 import numpy as np
 
 
-wb = openpyxl.load_workbook('wb.xlsx')
+wb = openpyxl.load_workbook('miler.xlsx')
 arkusz = wb['Arkusz1']
 wave_speed = arkusz['A14'].value
 
@@ -17,49 +17,36 @@ def wczytanie_danych(sheet):
     return mat
 
 
-macierzA = wczytanie_danych(arkusz)
-print(macierzA)
-
-
-def linearyzjaca(macierz, v):
-    for i in range(0, 8):
-        for j in range(0, 4):
+def linearyzjaca(macierz, v): #TODO zrobic obosna macierz bo to nie dziala
+    for i in range(0, 7):
+        for j in range(0, 3):
             if j != 3:
-                macierz[i][j] = 2*(-(macierz[i][j])+macierz[0][j])
+                macierz[i][j] = (-2*(macierz[i][j])+2*macierz[7][j])
             else:
-                macierz[i][j] = pow(v, 2)*2*(macierz[i][j]-(macierz[0][j]))
-    macierz = np.delete(macierz, 0, 0)
+                macierz[i][j] = pow(v, 2)*(2*macierz[i][j]-2*macierz[7][j])
+    print(macierz)
+    macierz = np.delete(macierz, 7, 0)
     return macierz
 
 
 def macierz_b(macierz, v):
     tab = []
+    a = 0
+    b = 0
     for i in range(0, 8):
-        for j in range(0, 4):
+        for j in range(0, 3):
             if j != 3:
-                a = -(pow(macierz[i][j], 2)) + pow(macierz[0][j], 2)
+                a = a+(-(pow(macierz[i][j], 2)) + pow(macierz[0][j], 2))
             else:
-                b = pow(v, 2)*(pow(macierz[i][j], 2) - pow(macierz[0][j], 2))
+                b = b+(pow(v, 2)*(pow(macierz[i][j], 2) - pow(macierz[0][j], 2)))
         tab.append(a+b)
     mat = np.array(tab).reshape(8, 1)
     mat = np.delete(mat, 0, 0)
     return mat
 
-
-macierzB = macierz_b(macierzA, wave_speed)
-macierzA = linearyzjaca(macierzA, wave_speed)
-print(macierzA, "\n")
-print(macierzB, "\n")
-
-macierzT = macierzA.transpose()
-print(macierzT, "\n")
-macierzA = np.dot(macierzT, macierzA)
-macierzB = np.dot(macierzT, macierzB)
-print(macierzA, "\n")
-print(macierzB, "\n")
-
-print(np.linalg.solve(macierzA, macierzB))
-
+macierzA = wczytanie_danych(arkusz)
+print(macierzA)
+print(linearyzjaca(macierzA, wave_speed))
 
 
 
