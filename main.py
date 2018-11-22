@@ -47,10 +47,20 @@ def macierz_b(macierz, v):
 
 
 macierzA = wczytanie_danych(arkusz)
-print(macierzA)
-print(linearyzjaca(macierzA, wave_speed))
+
 macierzB = macierz_b(macierzA, wave_speed)
-print(macierzB)
+macierzA = linearyzjaca(macierzA, wave_speed)
+
+
+macierzT = macierzA.transpose()
+
+
+macierzA = np.dot(macierzT, macierzA)
+macierzB = np.dot(macierzT, macierzB)
+print(macierzA, "\n")
+print(macierzB, "\n")
+
+print(np.linalg.solve(macierzA, macierzB))
 
 
 
