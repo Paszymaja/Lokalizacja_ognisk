@@ -1,19 +1,32 @@
 import openpyxl
+import easygui
 import numpy as np
 
-
-wb = openpyxl.load_workbook('miler.xlsx')
+path = easygui.fileopenbox()
+wb = openpyxl.load_workbook(path)
 arkusz = wb['Arkusz1']
 wave_speed = arkusz['A14'].value
+nr_w = int(input('Podaj numer wstrzasu: '))
 
 
-def wczytanie_danych(sheet):
+def wczytanie_danych(sheet, numer_wstrzasu):
     tab = []
+    tab2 = []
+    dict_nr = {
+        1: 7,
+        2: 8,
+        3: 9,
+        4: 10
+    }
     for row_i in range(2, 10):
-        for column_i in range(2, 6):
+        for column_i in range(2, 5):
             x1 = float(sheet.cell(row_i, column_i).value)
             tab.append(x1)
-    mat = np.array(tab).reshape(8, 4)
+        x_w = float(sheet.cell(row_i, dict_nr.get(numer_wstrzasu)).value)
+        tab2.append(x_w)
+    tab2 = np.array(tab2).reshape(8, 1)
+    mat = np.array(tab).reshape(8, 3)
+    mat = np.append(mat, tab2, axis=1)
     return mat
 
 
@@ -46,7 +59,8 @@ def macierz_b(macierz, v):
     return mat
 
 
-macierzA = wczytanie_danych(arkusz)
+macierzA = wczytanie_danych(arkusz, nr_w)
+
 
 macierzB = macierz_b(macierzA, wave_speed)
 macierzA = linearyzjaca(macierzA, wave_speed)
