@@ -6,6 +6,7 @@ path = easygui.fileopenbox()
 wb = openpyxl.load_workbook(path)
 arkusz = wb['Arkusz1']
 wave_speed = arkusz['A14'].value
+nr_w = 1
 nr_w = int(input('Podaj numer wstrzasu: '))
 
 
@@ -59,6 +60,15 @@ def macierz_b(macierz, v):
     return mat
 
 
+def zapis(sheet, table):
+    i = 0
+    for j in range(14, 18):
+        sheet.cell(row=j, column=4).value = table[i][0]
+        print(wynik[i][0])
+        i=i+1
+    wb.save('wb.xlsx')
+
+
 macierzA = wczytanie_danych(arkusz, nr_w)
 
 
@@ -74,7 +84,9 @@ macierzB = np.dot(macierzT, macierzB)
 print(macierzA, "\n")
 print(macierzB, "\n")
 
-print(np.linalg.solve(macierzA, macierzB))
+wynik = np.linalg.solve(macierzA, macierzB)
+zapis(arkusz, wynik)
+
 
 
 
