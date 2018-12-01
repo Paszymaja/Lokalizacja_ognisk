@@ -13,7 +13,7 @@ nr_w = int(input('Podaj numer wstrzasu: '))
 def wczytanie_danych(sheet, numer_wstrzasu):
     tab = []
     tab2 = []
-    dict_nr = {
+    dict_nr = {  # rzad w excelu
         1: 7,
         2: 8,
         3: 9,
@@ -65,7 +65,7 @@ def zapis(sheet, table):
     for j in range(14, 18):
         sheet.cell(row=j, column=4).value = table[i][0]
         print(wynik[i][0])
-        i=i+1
+        i = i+1
     wb.save('wb.xlsx')
 
 
